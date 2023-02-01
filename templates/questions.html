@@ -1,0 +1,123 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <link rel="stylesheet" href="/static/images/question.css">#}
+{##}
+{#    <meta charset="UTF-8">#}
+{#    <title>Questions</title>#}
+{#</head>#}
+{#<body>#}
+{##}
+{##navigationbar#}
+{#<nav>#}
+{#<br>#}
+{#    <span style="font-size:30px ;cursor:pointer" onclick="openNav()">&#9776; </span><br>#}
+{#    <a  class="hover-underline-animation" href='/list'>HOME</a>#}
+{#    <a  class="hover-underline-animation" href='/register'>REGISTER</a>#}
+{#    <a  class="hover-underline-animation"href='/login'>LOGIN</a>#}
+{#    <a  class="hover-underline-animation"href='/users'>USER_LIST</a>#}
+{#    <a  class="hover-underline-animation"href='/users/{{ session['user_name']  }}'>USER_PROFILE</a>#}
+{#</nav>#}
+{#<div class="searching">#}
+{#      <form class="searchbar" action="{{ url_for('search') }}" method='post'>#}
+{#        <input  type="text" id='search_phrase' placeholder="Search" name="search_phrase"#}
+{#               aria-label="Search" required>#}
+{#        <button class="bn3" type="submit">Search</button>#}
+{#      </form>#}
+{#    <a class="login_info">LOGGED AS: {{ session['user_name'] }}</a>#}
+{#      <form action='/logout'>#}
+{#            <label>#}
+{#                <input class="bn3" type="button"  value='logout'>#}
+{#            </label></form>#}
+{##}
+{#    <button onclick="location.href='/logout'" class="bn3" type="button"#}
+{#                        style="float: right;">Logout#}
+{#                </button>#}
+{# <form action='/logout'>#}
+{#            <label>#}
+{#                <input class="bn3" type="submit"  value='logout'>#}
+{#            </label></form>#}
+{#</div>#}
+{##navigationbar#}
+{% extends "base.html" %}
+{% block title %}User's list{% endblock %}
+{% block content %}
+
+<div class="content">
+<br><br><br><br><br><br><br>
+
+<br><br>
+
+
+{#<div>User:{{ session['user_name'] }}</div>#}
+<header>Questions</header>
+<br><br><br><br>
+<section class="dark">
+
+<form action="{{ url_for('filters') }}" method="POST">
+    <label>
+            <select name="sort">
+                <option value="latest">Latest</option>
+                <option value="oldest">Oldest</option>
+                <option value="name">By name</option>
+                <option value="votes">By votes</option>
+                <option value="views">By views</option>
+            </select>
+    </label>
+<button type="submit" class="bn3">Apply filter</button>
+    <button onclick="location.href='/add-question'" class="bn3" type="button">Add question</button>
+</form>
+</section>
+
+    {% for question in questions %}
+        <section class="popout">
+        <table>
+            <tr>
+            <td class="small_cells">
+                <strong>{{ question.vote_number }} </strong>votes
+        <br>
+                <strong>{{ question.view_number }} </strong>views
+            </td>
+            <td class="big_cells">
+                <a href="/question/{{ question.id }}"
+                   title="{{ question.title }}">{{ question.title }} </a><br>
+                   {{ question.message|truncate(70) }}
+            </td>
+
+
+
+            <td >
+                <strong>submitted:</strong><br> {{ question.submission_time }}
+            </td>
+            </tr>
+        </table>
+        </section>
+
+    {% endfor %}
+</div>
+
+
+{##navigationbar#}
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href='/list'>Home</a>
+  <a href='/login'>Login</a>
+  <a href='/register'>Register</a>
+  <a href='/users'>Users</a>
+  <a href='/users/{{ session['user_name'] }}'>Profile</a>
+</div>
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+{##navigationbar#}
+
+{# {%  for message in get_flashed_messages() %}#}
+{#          <p class="flashes">{{ message }}</p>#}
+{#    {% endfor %}#}
+{% endblock %}
+
